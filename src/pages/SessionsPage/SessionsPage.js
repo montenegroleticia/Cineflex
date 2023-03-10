@@ -25,13 +25,13 @@ export default function SessionsPage() {
         {section && section.days.map((d) => (
           <SessionContainer key={d.id}>
             {`${d.weekday} - ${d.date}`}
+            <ButtonsContainer>
             {d.showtimes.map((hour) => (
               <Link key={hour.id} to={`/assentos/${hour.id}`}>
-                <ButtonsContainer>
                   <button>{hour.name}</button>
-                </ButtonsContainer>
               </Link>
             ))}
+            </ButtonsContainer>
           </SessionContainer>
         ))}
       </div>
