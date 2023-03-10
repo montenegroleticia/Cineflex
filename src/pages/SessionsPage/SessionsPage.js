@@ -3,7 +3,7 @@ import { Link, useParams } from "react-router-dom";
 import axios from "axios";
 import { useEffect, useState } from "react";
 
-export default function SessionsPage() {
+export default function SessionsPage({ movie, setMovie, setTime}) {
   const { idFilme } = useParams();
   const [section, setSection] = useState([]);
 
@@ -12,6 +12,8 @@ export default function SessionsPage() {
     const promise = axios.get(url);
     promise.then((res) => {
       setSection(res.data.days);
+      setMovie(res.data);
+      console.log(res.data);
     });
     promise.catch((err) => {
       console.log(err.response.data);
@@ -22,13 +24,13 @@ export default function SessionsPage() {
     <PageContainer>
       Selecione o horário
       <div>
-        {section.map((section) => (
-          <SessionContainer key={section.id}>
-            {section.weekday} - {section.date}
-            {section.showtimes.map((time) => (
-              <Link key={time.id} to={`/assentos/${time.id}`}>
+        {section.map((d) => (
+          <SessionContainer key={d.id}>
+            {d.weekday - d.date}
+            {d.showtimes.map((hour) => (
+              <Link key={hour.id} to={`/assentos/${hour.id}`}>
                 <ButtonsContainer>
-                  <button>{time.name}</button>
+                  <button onClick={() => setTime(hour)}>{hour.name}</button>
                 </ButtonsContainer>
               </Link>
             ))}
@@ -37,15 +39,10 @@ export default function SessionsPage() {
       </div>
       <FooterContainer>
         <div>
-          <img
-            src={
-              "https://br.web.img2.acsta.net/pictures/22/05/16/17/59/5165498.jpg"
-            }
-            alt="poster"
-          />
+          <img src={movie.posterURL} alt={movie.title} />
         </div>
         <div>
-          <p>Tudo em todo lugar ao mesmo tempo</p>
+          <p>{movie.title}</p>
         </div>
       </FooterContainer>
     </PageContainer>
