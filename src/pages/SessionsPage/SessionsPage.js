@@ -12,7 +12,6 @@ export default function SessionsPage() {
     const promise = axios.get(url);
     promise.then((res) => {
       setSection(res.data.days);
-      console.log(res.data);
     });
     promise.catch((err) => {
       console.log(err.response.data);
@@ -23,15 +22,15 @@ export default function SessionsPage() {
     <PageContainer>
       Selecione o horário
       <div>
-        {section.map((s) => (
-          <SessionContainer key={s.id}>
-            {s.weekday} - {s.date}
-            {s.showtimes.map((time) => (
-              <ButtonsContainer key={time.id}>
-                <Link to={`/sessoes/${time.id}`}>
+        {section.map((section) => (
+          <SessionContainer key={section.id}>
+            {section.weekday} - {section.date}
+            {section.showtimes.map((time) => (
+              <Link key={time.id} to={`/assentos/${time.id}`}>
+                <ButtonsContainer>
                   <button>{time.name}</button>
-                </Link>
-              </ButtonsContainer>
+                </ButtonsContainer>
+              </Link>
             ))}
           </SessionContainer>
         ))}
