@@ -3,17 +3,15 @@ import { Link, useParams } from "react-router-dom";
 import axios from "axios";
 import { useEffect, useState } from "react";
 
-export default function SessionsPage({ movie, setMovie, setTime}) {
+export default function SessionsPage() {
   const { idFilme } = useParams();
-  const [section, setSection] = useState([]);
+  const [section, setSection] = useState(null);
 
   useEffect(() => {
     const url = `https://mock-api.driven.com.br/api/v8/cineflex/movies/${idFilme}/showtimes`;
     const promise = axios.get(url);
     promise.then((res) => {
-      setSection(res.data.days);
-      setMovie(res.data);
-      console.log(res.data);
+      setSection(res.data);
     });
     promise.catch((err) => {
       console.log(err.response.data);
@@ -24,13 +22,13 @@ export default function SessionsPage({ movie, setMovie, setTime}) {
     <PageContainer>
       Selecione o horário
       <div>
-        {section.map((d) => (
+        {section && section.days.map((d) => (
           <SessionContainer key={d.id}>
-            {d.weekday - d.date}
+            {`${d.weekday} - ${d.date}`}
             {d.showtimes.map((hour) => (
               <Link key={hour.id} to={`/assentos/${hour.id}`}>
                 <ButtonsContainer>
-                  <button onClick={() => setTime(hour)}>{hour.name}</button>
+                  <button>{hour.name}</button>
                 </ButtonsContainer>
               </Link>
             ))}
@@ -39,10 +37,10 @@ export default function SessionsPage({ movie, setMovie, setTime}) {
       </div>
       <FooterContainer>
         <div>
-          <img src={movie.posterURL} alt={movie.title} />
+          <img src={section && section.posterURL} alt={section && section.title} />
         </div>
         <div>
-          <p>{movie.title}</p>
+          <p>{section && section.title}</p>
         </div>
       </FooterContainer>
     </PageContainer>

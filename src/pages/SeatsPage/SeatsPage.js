@@ -3,16 +3,16 @@ import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import axios from "axios";
 
-export default function SeatsPage({movie, time, day}) {
+export default function SeatsPage({day}) {
   const { idSessao } = useParams();
-  const [seats, setSeats] = useState([]);
+  const [seats, setSeats] = useState(null);
 
   useEffect(() => {
     const url = `https://mock-api.driven.com.br/api/v8/cineflex/showtimes/${idSessao}/seats`;
     const promise = axios.get(url);
     promise.then((res) => {
       setSeats(res.data);
-      console.log(res.data.seats);
+      console.log(res.data);
     });
     promise.catch((err) => {
       console.log(err.response.data);
@@ -23,7 +23,7 @@ export default function SeatsPage({movie, time, day}) {
     <PageContainer>
       Selecione o(s) assento(s)
       <SeatsContainer>
-      {seats.seats.map((seat)=>(
+      {seats && seats.seats.map((seat)=>(
         <SeatItem key={seat.id}>{seat.name}</SeatItem>
       ))}
       </SeatsContainer>
@@ -50,11 +50,11 @@ export default function SeatsPage({movie, time, day}) {
       </FormContainer>
       <FooterContainer>
       <div>
-          <img src={movie.posterURL} alt={movie.title} />
+          <img src={seats && seats.movie.posterURL} alt={seats && seats.movie.title} />
         </div>
         <div>
-          <p>{movie.title}</p>
-          <p>{day} - {time.name}</p>
+          <p>{seats && seats.movie.title}</p>
+          <p>{seats && seats.day.weekday} - {seats && seats.name}</p>
         </div>
       </FooterContainer>
     </PageContainer>
