@@ -3,12 +3,11 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import axios from "axios";
 
-export default function SeatsPage() {
+export default function SeatsPage({ form, setForm }) {
   const { idSessao } = useParams();
   const [seats, setSeats] = useState(null);
-  const [name, setName] = useState("");
-  const [CPF, setCPF] = useState("");
   const navigate = useNavigate();
+  const [select, setSelect] = useState(null);
 
   useEffect(() => {
     const url = `https://mock-api.driven.com.br/api/v8/cineflex/showtimes/${idSessao}/seats`;
@@ -22,14 +21,26 @@ export default function SeatsPage() {
     });
   }, []);
 
+  function callSelect() {
+    setSelect("#1AAE9E");
+  }
+
+  function handleChange(event) {
+    setForm({ ...form, [event.target.name]: event.target.value });
+    console.log(form);
+  }
+
   function callLogin(event) {
     event.presentDefault();
 
     const url =
       "https://mock-api.driven.com.br/api/v8/cineflex/seats/book-many";
-    const promise = axios.post(url, { name, CPF });
-    promise.then(() => navigate("/"));
-    promise.catch((err) => console.log(err.response));
+    const promise = axios.post(url, form);
+    promise.then((res) => { 
+    navigate("/sucesso")
+    console.log(form)
+    console.log(res.data)})
+    promise.catch((err) => console.log(err.response.data));
   }
 
   return (
@@ -38,12 +49,19 @@ export default function SeatsPage() {
       <SeatsContainer>
         {seats &&
           seats.seats.map((seat) => (
-            <SeatItem key={seat.id} seat={seat.isAvailable} >{seat.name}</SeatItem>
+            <SeatItem
+              key={seat.id}
+              seat={seat.isAvailable}
+              select={select}
+              onClick={() => callSelect(seat.id)}
+            >
+              {seat.name}
+            </SeatItem>
           ))}
       </SeatsContainer>
       <CaptionContainer>
         <CaptionItem>
-          <CaptionCircle green={"#1AAE9E"} backGreen={"#0E7D71"}/>
+          <CaptionCircle green={"#1AAE9E"} backGreen={"#0E7D71"} />
           Selecionado
         </CaptionItem>
         <CaptionItem>
@@ -58,17 +76,21 @@ export default function SeatsPage() {
       <FormContainer onSubmit={callLogin}>
         Nome do Comprador:
         <input
+          type="text"
           placeholder="Digite seu nome..."
           required
-          value={name}
-          onChange={(event) => setName(event.target.value)}
+          name={"name"}
+          value={form.name}
+          onChange={handleChange}
         />
         CPF do Comprador:
         <input
+          type="number"
           placeholder="Digite seu CPF..."
           required
-          value={CPF}
-          onChange={(event) => setCPF(event.target.value)}
+          name={"cpf"}
+          value={form.cpf}
+          onChange={handleChange}
         />
         <button type="submit">Reservar Assento(s)</button>
       </FormContainer>
@@ -133,8 +155,15 @@ const CaptionContainer = styled.div`
   margin: 20px;
 `;
 const CaptionCircle = styled.div`
-  border: 1px solid ${ props => props.backGreen ? props.backGreen : props.backYellow ? props.backYellow : "#7B8B99"};
-  background-color: ${ props => props.green ? props.green : props.yellow ? props.yellow : "#C3CFD9"};
+  border: 1px solid
+    ${(props) =>
+      props.backGreen
+        ? props.backGreen
+        : props.backYellow
+        ? props.backYellow
+        : "#7B8B99"};
+  background-color: ${(props) =>
+    props.green ? props.green : props.yellow ? props.yellow : "#C3CFD9"};
   height: 25px;
   width: 25px;
   border-radius: 25px;
@@ -150,8 +179,9 @@ const CaptionItem = styled.div`
   font-size: 12px;
 `;
 const SeatItem = styled.div`
-  border: 1px solid ${ props => props.seat === false ? "#F7C52B" : "blue"};
-  background-color: ${ props => props.seat === false ? "#FBE192" : "lightblue"};
+  border: 1px solid ${(props) => (props.seat === false ? "#F7C52B" : "#808F9D")};
+  background-color: ${(props) =>
+    props.select ? props.select : props.seat === false ? "#FBE192" : "#C3CFD9"};
   height: 25px;
   width: 25px;
   border-radius: 25px;
