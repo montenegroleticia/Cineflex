@@ -7,7 +7,7 @@ export default function SeatsPage({ form, setForm }) {
   const { idSessao } = useParams();
   const [seats, setSeats] = useState(null);
   const navigate = useNavigate();
-  const [select, setSelect] = useState(null);
+  const [selectSeat, setSelectSeat] = useState([]);
 
   useEffect(() => {
     const url = `https://mock-api.driven.com.br/api/v8/cineflex/showtimes/${idSessao}/seats`;
@@ -21,8 +21,14 @@ export default function SeatsPage({ form, setForm }) {
     });
   }, []);
 
-  function callSelect() {
-    setSelect("#1AAE9E");
+  function callSelect(id) {
+    if (!form.ids.includes(id)) {
+      const seatsSelect = [...selectSeat, id];
+      setSelectSeat(seatsSelect);
+      const updateSeat = [...form.ids, id];
+      const updateForm = { ...form, ids: updateSeat };
+      setForm(updateForm);
+    }
   }
 
   function handleChange(event) {
@@ -36,10 +42,11 @@ export default function SeatsPage({ form, setForm }) {
     const url =
       "https://mock-api.driven.com.br/api/v8/cineflex/seats/book-many";
     const promise = axios.post(url, form);
-    promise.then((res) => { 
-    navigate("/sucesso")
-    console.log(form)
-    console.log(res.data)})
+    promise.then((res) => {
+      navigate("/sucesso");
+      console.log(form);
+      console.log(res.data);
+    });
     promise.catch((err) => console.log(err.response.data));
   }
 
@@ -51,8 +58,20 @@ export default function SeatsPage({ form, setForm }) {
           seats.seats.map((seat) => (
             <SeatItem
               key={seat.id}
-              seat={seat.isAvailable}
-              select={select}
+              color={
+                seat.isAvailable === false
+                  ? "#FBE192"
+                  : selectSeat.includes(seat.id)
+                  ? "#1AAE9E"
+                  : "#C3CFD9"
+              }
+              borderColor={
+                seat.isAvailable === false
+                  ? "#F7C52B"
+                  : selectSeat.includes(seat.id)
+                  ? "#1AAE9E"
+                  : "#808F9D"
+              }
               onClick={() => callSelect(seat.id)}
             >
               {seat.name}
@@ -61,15 +80,15 @@ export default function SeatsPage({ form, setForm }) {
       </SeatsContainer>
       <CaptionContainer>
         <CaptionItem>
-          <CaptionCircle green={"#1AAE9E"} backGreen={"#0E7D71"} />
+          <CaptionCircle color={"#1AAE9E"} borderColor={"#0E7D71"} />
           Selecionado
         </CaptionItem>
         <CaptionItem>
-          <CaptionCircle />
+          <CaptionCircle color={"#C3CFD9"} borderColor={"#808F9D"} />
           Disponível
         </CaptionItem>
         <CaptionItem>
-          <CaptionCircle yellow={"#FBE192"} backYellow={"#F7C52B"} />
+          <CaptionCircle color={"#FBE192"} borderColor={"#F7C52B"} />
           Indisponível
         </CaptionItem>
       </CaptionContainer>
@@ -155,15 +174,8 @@ const CaptionContainer = styled.div`
   margin: 20px;
 `;
 const CaptionCircle = styled.div`
-  border: 1px solid
-    ${(props) =>
-      props.backGreen
-        ? props.backGreen
-        : props.backYellow
-        ? props.backYellow
-        : "#7B8B99"};
-  background-color: ${(props) =>
-    props.green ? props.green : props.yellow ? props.yellow : "#C3CFD9"};
+  border: 1px solid ${(props) => props.borderColor};
+  background-color: ${(props) => props.color};
   height: 25px;
   width: 25px;
   border-radius: 25px;
@@ -179,9 +191,8 @@ const CaptionItem = styled.div`
   font-size: 12px;
 `;
 const SeatItem = styled.div`
-  border: 1px solid ${(props) => (props.seat === false ? "#F7C52B" : "#808F9D")};
-  background-color: ${(props) =>
-    props.select ? props.select : props.seat === false ? "#FBE192" : "#C3CFD9"};
+  border: 1px solid ${(props) => props.borderColor};
+  background-color: ${(props) => props.color};
   height: 25px;
   width: 25px;
   border-radius: 25px;

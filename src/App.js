@@ -7,8 +7,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { useState } from "react";
 
 export default function App() {
-  //const [selectSeats, setSelectsSeats] = useState([]);
-  const [form, setForm] = useState({name: "", cpf: ""})
+  const [form, setForm] = useState({ids: [], name: "", cpf: ""});
 
   return (
     <BrowserRouter>

@@ -1,6 +1,6 @@
 import styled from "styled-components"
 
-export default function SuccessPage() {
+export default function SuccessPage({form}) {
 
     return (
         <PageContainer>
