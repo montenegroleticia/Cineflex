@@ -73,7 +73,7 @@ export default function SeatsPage({ form, setForm, setSeatName, seatName }) {
                   : "#808F9D"
               }
               onClick={() => {
-                callSelect(seat.isAvailable === true && seat.id);
+                callSelect(seat.isAvailable === true ? seat.id : alert("Esse assento não está disponível"));
                 setSeatName(
                   seat.isAvailable === true
                     ? [...seatName, seat.name]
@@ -124,7 +124,7 @@ export default function SeatsPage({ form, setForm, setSeatName, seatName }) {
           Reservar Assento(s)
         </button>
       </FormContainer>
-      <FooterContainer data-test="movie">
+      <FooterContainer data-test="footer">
         <div>
           <img
             src={seats && seats.movie.posterURL}
