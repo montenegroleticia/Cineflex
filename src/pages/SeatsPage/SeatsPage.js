@@ -28,6 +28,27 @@ export default function SeatsPage({ form, setForm, setSeatName, seatName }) {
       const updateSeat = [...form.ids, id];
       const updateForm = { ...form, ids: updateSeat };
       setForm(updateForm);
+    } else {
+      const updatedSelectSeat = selectSeat.filter((seatId) => seatId !== id);
+      setSelectSeat(updatedSelectSeat);
+      const updatedForm = {
+        ...form,
+        ids: form.ids.filter((seatId) => seatId !== id),
+      };
+      setForm(updatedForm);
+    }
+  }
+
+  function callRemoveName(seat) {
+    console.log(seatName);
+    if (seat.isAvailable === false) {
+      setSeatName([...seatName]);
+    } else if (seatName.includes(seat.name)) {
+      const updatedName = seatName.filter((seatName) => seatName !== seat.name);
+      setSeatName(updatedName);
+    } else {
+      const order = [...seatName, seat.name].sort((a, b) => Number(a) - Number(b));
+      setSeatName(order);
     }
   }
 
@@ -73,12 +94,12 @@ export default function SeatsPage({ form, setForm, setSeatName, seatName }) {
                   : "#808F9D"
               }
               onClick={() => {
-                callSelect(seat.isAvailable === true ? seat.id : alert("Esse assento não está disponível"));
-                setSeatName(
+                callSelect(
                   seat.isAvailable === true
-                    ? [...seatName, seat.name]
-                    : [...seatName]
+                    ? seat.id
+                    : alert("Esse assento não está disponível")
                 );
+                callRemoveName(seat);
               }}
             >
               {seat.name}
