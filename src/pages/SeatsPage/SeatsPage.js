@@ -56,6 +56,7 @@ export default function SeatsPage({ form, setForm, setSeatName, seatName }) {
         {seats &&
           seats.seats.map((seat) => (
             <SeatItem
+              data-test="seat"
               key={seat.id}
               color={
                 seat.isAvailable === false
@@ -74,7 +75,9 @@ export default function SeatsPage({ form, setForm, setSeatName, seatName }) {
               onClick={() => {
                 callSelect(seat.isAvailable === true && seat.id);
                 setSeatName(
-                  seat.isAvailable === true ? [...seatName, seat.name] : [...seatName]
+                  seat.isAvailable === true
+                    ? [...seatName, seat.name]
+                    : [...seatName]
                 );
               }}
             >
@@ -99,6 +102,7 @@ export default function SeatsPage({ form, setForm, setSeatName, seatName }) {
       <FormContainer onSubmit={callLogin}>
         Nome do Comprador:
         <input
+          data-test="client-name"
           type="text"
           placeholder="Digite seu nome..."
           required
@@ -108,6 +112,7 @@ export default function SeatsPage({ form, setForm, setSeatName, seatName }) {
         />
         CPF do Comprador:
         <input
+          data-test="client-cpf"
           type="number"
           placeholder="Digite seu CPF..."
           required
@@ -115,9 +120,11 @@ export default function SeatsPage({ form, setForm, setSeatName, seatName }) {
           value={form.cpf}
           onChange={handleChange}
         />
-        <button type="submit">Reservar Assento(s)</button>
+        <button data-test="book-seat-btn" type="submit">
+          Reservar Assento(s)
+        </button>
       </FormContainer>
-      <FooterContainer>
+      <FooterContainer data-test="movie">
         <div>
           <img
             src={seats && seats.movie.posterURL}
