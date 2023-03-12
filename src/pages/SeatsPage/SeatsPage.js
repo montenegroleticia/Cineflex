@@ -139,7 +139,7 @@ const PageContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  font-family: "Roboto";
+  font-family: "Roboto", sans-serif;
   font-size: 24px;
   text-align: center;
   color: #293845;
@@ -200,7 +200,7 @@ const SeatItem = styled.div`
   height: 25px;
   width: 25px;
   border-radius: 25px;
-  font-family: "Roboto";
+  font-family: "Roboto", sans-serif;
   font-size: 11px;
   display: flex;
   align-items: center;

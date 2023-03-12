@@ -50,7 +50,7 @@ export default function SessionsPage() {
 const PageContainer = styled.div`
   display: flex;
   flex-direction: column;
-  font-family: "Roboto";
+  font-family: "Roboto", sans-serif;
   font-size: 24px;
   text-align: center;
   color: #293845;
@@ -65,7 +65,7 @@ const SessionContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  font-family: "Roboto";
+  font-family: "Roboto", sans-serif;
   font-size: 20px;
   color: #293845;
   padding: 0 20px;

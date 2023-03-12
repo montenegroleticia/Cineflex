@@ -54,7 +54,7 @@ const PageContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  font-family: "Roboto";
+  font-family: "Roboto", sans-serif;
   font-size: 24px;
   color: #293845;
   margin: 30px 20px;
@@ -67,7 +67,7 @@ const PageContainer = styled.div`
     margin-top: 50px;
   }
   h1 {
-    font-family: "Roboto";
+    font-family: "Roboto", sans-serif;
     font-style: normal;
     font-weight: 700;
     font-size: 24px;

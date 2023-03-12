@@ -37,7 +37,7 @@ const PageContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  font-family: "Roboto";
+  font-family: "Roboto", sans-serif;
   font-size: 24px;
   text-align: center;
   color: #293845;
