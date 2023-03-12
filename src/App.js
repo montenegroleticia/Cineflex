@@ -7,7 +7,8 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { useState } from "react";
 
 export default function App() {
-  const [form, setForm] = useState({ids: [], name: "", cpf: ""});
+  const [form, setForm] = useState({ ids: [], name: "", cpf: "" });
+  const [seatName, setSeatName] = useState([]);
 
   return (
     <BrowserRouter>
@@ -22,12 +23,20 @@ export default function App() {
             <SeatsPage
               setForm={setForm}
               form={form}
+              setSeatName={setSeatName}
+              seatName={seatName}
             />
           }
         />
         <Route
           path="/sucesso"
-          element={<SuccessPage form={form} />}
+          element={
+            <SuccessPage
+              setForm={setForm}
+              setSeatName={setSeatName}
+              seatName={seatName}
+            />
+          }
         />
       </Routes>
     </BrowserRouter>

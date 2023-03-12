@@ -1,71 +1,91 @@
-import styled from "styled-components"
+import styled from "styled-components";
+import { useLocation } from "react-router-dom";
+import { Link } from "react-router-dom";
 
-export default function SuccessPage({form}) {
+export default function SuccessPage({ setForm, seatName, setSeatName }) {
+  const location = useLocation();
+  const { form, seats } = location.state;
 
-    return (
-        <PageContainer>
-            <h1>Pedido feito <br /> com sucesso!</h1>
+  function clear() {
+    setForm({ ids: [], name: "", cpf: "" });
+    setSeatName([]);
+  }
 
-            <TextContainer>
-                <strong><p>Filme e sessão</p></strong>
-                <p>Tudo em todo lugar ao mesmo tempo</p>
-                <p>03/03/2023 - 14:00</p>
-            </TextContainer>
+  return (
+    <PageContainer>
+      <h1>
+        Pedido feito <br /> com sucesso!
+      </h1>
 
-            <TextContainer>
-                <strong><p>Ingressos</p></strong>
-                <p>Assento 01</p>
-                <p>Assento 02</p>
-                <p>Assento 03</p>
-            </TextContainer>
+      <TextContainer>
+        <strong>
+          <p>Filme e sessão</p>
+        </strong>
+        <p>{seats && seats.movie.title}</p>
+        <p>
+          {seats && seats.day.date} - {seats && seats.name}
+        </p>
+      </TextContainer>
 
-            <TextContainer>
-                <strong><p>Comprador</p></strong>
-                <p>Nome: Letícia Chijo</p>
-                <p>CPF: 123.456.789-10</p>
-            </TextContainer>
+      <TextContainer>
+        <strong>
+          <p>Ingressos</p>
+        </strong>
+        {seatName.map((name) => (
+          <p key={name}>Assento {name}</p>
+        ))}
+      </TextContainer>
 
-            <button>Voltar para Home</button>
-        </PageContainer>
-    )
+      <TextContainer>
+        <strong>
+          <p>Comprador</p>
+        </strong>
+        <p>Nome: {form.name}</p>
+        <p>CPF: {form.cpf}</p>
+      </TextContainer>
+      <Link to="/" onClick={() => clear()} data-test="go-home-btn">
+        <button>Voltar para Home</button>
+      </Link>
+    </PageContainer>
+  );
 }
 
 const PageContainer = styled.div`
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    font-family: 'Roboto';
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-family: "Roboto";
+  font-size: 24px;
+  color: #293845;
+  margin: 30px 20px;
+  padding-bottom: 120px;
+  padding-top: 70px;
+  a {
+    text-decoration: none;
+  }
+  button {
+    margin-top: 50px;
+  }
+  h1 {
+    font-family: "Roboto";
+    font-style: normal;
+    font-weight: 700;
     font-size: 24px;
-    color: #293845;
-    margin: 30px 20px;
-    padding-bottom: 120px;
-    padding-top: 70px;
-    a {
-        text-decoration: none;
-    }
-    button {
-        margin-top: 50px;
-    }
-    h1 {
-        font-family: 'Roboto';
-        font-style: normal;
-        font-weight: 700;
-        font-size: 24px;
-        line-height: 28px;
-        display: flex;
-        align-items: center;
-        text-align: center;
-        color: #247A6B;
-    }
-`
-const TextContainer = styled.div`
-    width: 100%;
+    line-height: 28px;
     display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    margin-top: 30px;
-    strong {
-        font-weight: bold;
-        margin-bottom: 10px;
-    }
-`
+    align-items: center;
+    text-align: center;
+    color: #247a6b;
+  }
+`;
+const TextContainer = styled.div`
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  margin-top: 30px;
+  strong {
+    font-weight: bold;
+    margin-bottom: 10px;
+  }
+`;

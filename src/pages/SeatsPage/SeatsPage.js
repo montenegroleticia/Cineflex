@@ -3,7 +3,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import axios from "axios";
 
-export default function SeatsPage({ form, setForm }) {
+export default function SeatsPage({ form, setForm, setSeatName, seatName }) {
   const { idSessao } = useParams();
   const [seats, setSeats] = useState(null);
   const navigate = useNavigate();
@@ -19,7 +19,7 @@ export default function SeatsPage({ form, setForm }) {
     promise.catch((err) => {
       console.log(err.response.data);
     });
-  }, []);
+  }, [idSessao]);
 
   function callSelect(id) {
     if (!form.ids.includes(id)) {
@@ -33,17 +33,16 @@ export default function SeatsPage({ form, setForm }) {
 
   function handleChange(event) {
     setForm({ ...form, [event.target.name]: event.target.value });
-    console.log(form);
   }
 
   function callLogin(event) {
-    event.presentDefault();
+    event.preventDefault();
 
     const url =
       "https://mock-api.driven.com.br/api/v8/cineflex/seats/book-many";
     const promise = axios.post(url, form);
     promise.then((res) => {
-      navigate("/sucesso");
+      navigate("/sucesso", { state: { form, seats } });
       console.log(form);
       console.log(res.data);
     });
@@ -72,7 +71,12 @@ export default function SeatsPage({ form, setForm }) {
                   ? "#1AAE9E"
                   : "#808F9D"
               }
-              onClick={() => callSelect(seat.id)}
+              onClick={() => {
+                callSelect(seat.isAvailable === true && seat.id);
+                setSeatName(
+                  seat.isAvailable === true ? [...seatName, seat.name] : [...seatName]
+                );
+              }}
             >
               {seat.name}
             </SeatItem>

@@ -16,7 +16,7 @@ export default function SessionsPage() {
     promise.catch((err) => {
       console.log(err.response.data);
     });
-  }, []);
+  }, [idFilme]);
 
   return (
     <PageContainer>
