@@ -5,6 +5,8 @@ import { Link } from "react-router-dom";
 export default function SuccessPage({ setForm, seatName, setSeatName }) {
   const location = useLocation();
   const { form, seats } = location.state;
+  const cpf = form.cpf.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, "$1.$2.$3-$4");
+  console.log(cpf);
 
   function clear() {
     setForm({ ids: [], name: "", cpf: "" });
@@ -41,7 +43,7 @@ export default function SuccessPage({ setForm, seatName, setSeatName }) {
           <p>Comprador</p>
         </strong>
         <p>Nome: {form.name}</p>
-        <p>CPF: {form.cpf}</p>
+        <p>CPF: {cpf}</p>
       </TextContainer>
       <Link to="/" onClick={() => clear()} data-test="go-home-btn">
         <button>Voltar para Home</button>
