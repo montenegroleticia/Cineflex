@@ -6,7 +6,6 @@ export default function SuccessPage({ setForm, seatName, setSeatName }) {
   const location = useLocation();
   const { form, seats } = location.state;
   const cpf = form.cpf.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, "$1.$2.$3-$4");
-  console.log(cpf);
 
   function clear() {
     setForm({ ids: [], name: "", cpf: "" });
