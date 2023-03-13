@@ -142,8 +142,10 @@ export default function SeatsPage({ form, setForm, setSeatName, seatName }) {
           />
           CPF do Comprador:
           <input
-            data-test="client-cpf"
+            maxLength="11"
+            minLength="11"
             type="number"
+            data-test="client-cpf"
             placeholder="Digite seu CPF..."
             required
             name={"cpf"}
