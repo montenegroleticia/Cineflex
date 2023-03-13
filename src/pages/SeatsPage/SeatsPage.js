@@ -144,13 +144,19 @@ export default function SeatsPage({ form, setForm, setSeatName, seatName }) {
           <input
             maxLength="11"
             minLength="11"
-            type="number"
+            type="text"
             data-test="client-cpf"
             placeholder="Digite seu CPF..."
             required
             name={"cpf"}
             value={form.cpf}
             onChange={handleChange}
+            onKeyDown={(e) => {
+              const key = e.key;
+              if (!/^\d$/.test(key) && key !== "Backspace" && key !== "Delete") {
+                  e.preventDefault();
+              }
+          }}
           />
           <button data-test="book-seat-btn" type="submit">
             Reservar Assento(s)
