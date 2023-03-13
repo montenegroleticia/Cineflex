@@ -1,11 +1,13 @@
 import styled from "styled-components";
-import { Link, useParams } from "react-router-dom";
+import { Link, useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useEffect, useState } from "react";
+import { BiArrowBack } from "react-icons/bi";
 
 export default function SessionsPage() {
   const { idFilme } = useParams();
   const [section, setSection] = useState(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const url = `https://mock-api.driven.com.br/api/v8/cineflex/movies/${idFilme}/showtimes`;
@@ -19,31 +21,42 @@ export default function SessionsPage() {
   }, [idFilme]);
 
   return (
-    <PageContainer>
-      Selecione o horário
-      <div>
-        {section && section.days.map((d) => (
-          <SessionContainer data-test="movie-day" key={d.id}>
-            {`${d.weekday} - ${d.date}`}
-            <ButtonsContainer>
-            {d.showtimes.map((hour) => (
-              <Link key={hour.id} to={`/assentos/${hour.id}`}>
-                  <button data-test="showtime" >{hour.name}</button>
-              </Link>
+    <>
+      <NavContainer>
+        <Link onClick={() => navigate(-1)} data-test="go-home-header-btn">
+          <BiArrowBack />
+        </Link>
+      </NavContainer>
+      <PageContainer>
+        Selecione o horário
+        <div>
+          {section &&
+            section.days.map((d) => (
+              <SessionContainer data-test="movie-day" key={d.id}>
+                {`${d.weekday} - ${d.date}`}
+                <ButtonsContainer>
+                  {d.showtimes.map((hour) => (
+                    <Link key={hour.id} to={`/assentos/${hour.id}`}>
+                      <button data-test="showtime">{hour.name}</button>
+                    </Link>
+                  ))}
+                </ButtonsContainer>
+              </SessionContainer>
             ))}
-            </ButtonsContainer>
-          </SessionContainer>
-        ))}
-      </div>
-      <FooterContainer data-test="footer" >
-        <div>
-          <img src={section && section.posterURL} alt={section && section.title} />
         </div>
-        <div>
-          <p>{section && section.title}</p>
-        </div>
-      </FooterContainer>
-    </PageContainer>
+        <FooterContainer data-test="footer">
+          <div>
+            <img
+              src={section && section.posterURL}
+              alt={section && section.title}
+            />
+          </div>
+          <div>
+            <p>{section && section.title}</p>
+          </div>
+        </FooterContainer>
+      </PageContainer>
+    </>
   );
 }
 
@@ -117,5 +130,20 @@ const FooterContainer = styled.div`
         margin-top: 10px;
       }
     }
+  }
+`;
+const NavContainer = styled.div`
+  width: 100%;
+  height: 70px;
+  display: flex;
+  align-items: center;
+  font-size: 34px;
+  position: fixed;
+  top: 0;
+  a {
+    position: fixed;
+    left: 18px;
+    text-decoration: none;
+    color: #000000;
   }
 `;

@@ -1,7 +1,8 @@
 import styled from "styled-components";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams, Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import axios from "axios";
+import { BiArrowBack } from "react-icons/bi";
 
 export default function SeatsPage({ form, setForm, setSeatName, seatName }) {
   const { idSessao } = useParams();
@@ -47,7 +48,9 @@ export default function SeatsPage({ form, setForm, setSeatName, seatName }) {
       const updatedName = seatName.filter((seatName) => seatName !== seat.name);
       setSeatName(updatedName);
     } else {
-      const order = [...seatName, seat.name].sort((a, b) => Number(a) - Number(b));
+      const order = [...seatName, seat.name].sort(
+        (a, b) => Number(a) - Number(b)
+      );
       setSeatName(order);
     }
   }
@@ -71,95 +74,102 @@ export default function SeatsPage({ form, setForm, setSeatName, seatName }) {
   }
 
   return (
-    <PageContainer>
-      Selecione o(s) assento(s)
-      <SeatsContainer>
-        {seats &&
-          seats.seats.map((seat) => (
-            <SeatItem
-              data-test="seat"
-              key={seat.id}
-              color={
-                seat.isAvailable === false
-                  ? "#FBE192"
-                  : selectSeat.includes(seat.id)
-                  ? "#1AAE9E"
-                  : "#C3CFD9"
-              }
-              borderColor={
-                seat.isAvailable === false
-                  ? "#F7C52B"
-                  : selectSeat.includes(seat.id)
-                  ? "#1AAE9E"
-                  : "#808F9D"
-              }
-              onClick={() => {
-                callSelect(
-                  seat.isAvailable === true
-                    ? seat.id
-                    : alert("Esse assento não está disponível")
-                );
-                callRemoveName(seat);
-              }}
-            >
-              {seat.name}
-            </SeatItem>
-          ))}
-      </SeatsContainer>
-      <CaptionContainer>
-        <CaptionItem>
-          <CaptionCircle color={"#1AAE9E"} borderColor={"#0E7D71"} />
-          Selecionado
-        </CaptionItem>
-        <CaptionItem>
-          <CaptionCircle color={"#C3CFD9"} borderColor={"#808F9D"} />
-          Disponível
-        </CaptionItem>
-        <CaptionItem>
-          <CaptionCircle color={"#FBE192"} borderColor={"#F7C52B"} />
-          Indisponível
-        </CaptionItem>
-      </CaptionContainer>
-      <FormContainer onSubmit={callLogin}>
-        Nome do Comprador:
-        <input
-          data-test="client-name"
-          type="text"
-          placeholder="Digite seu nome..."
-          required
-          name={"name"}
-          value={form.name}
-          onChange={handleChange}
-        />
-        CPF do Comprador:
-        <input
-          data-test="client-cpf"
-          type="number"
-          placeholder="Digite seu CPF..."
-          required
-          name={"cpf"}
-          value={form.cpf}
-          onChange={handleChange}
-        />
-        <button data-test="book-seat-btn" type="submit">
-          Reservar Assento(s)
-        </button>
-      </FormContainer>
-      <FooterContainer data-test="footer">
-        <div>
-          <img
-            src={seats && seats.movie.posterURL}
-            alt={seats && seats.movie.title}
+    <>
+      <NavContainer>
+        <Link onClick={() => navigate(-1)} data-test="go-home-header-btn">
+          <BiArrowBack />
+        </Link>
+      </NavContainer>
+      <PageContainer>
+        Selecione o(s) assento(s)
+        <SeatsContainer>
+          {seats &&
+            seats.seats.map((seat) => (
+              <SeatItem
+                data-test="seat"
+                key={seat.id}
+                color={
+                  seat.isAvailable === false
+                    ? "#FBE192"
+                    : selectSeat.includes(seat.id)
+                    ? "#1AAE9E"
+                    : "#C3CFD9"
+                }
+                borderColor={
+                  seat.isAvailable === false
+                    ? "#F7C52B"
+                    : selectSeat.includes(seat.id)
+                    ? "#1AAE9E"
+                    : "#808F9D"
+                }
+                onClick={() => {
+                  callSelect(
+                    seat.isAvailable === true
+                      ? seat.id
+                      : alert("Esse assento não está disponível")
+                  );
+                  callRemoveName(seat);
+                }}
+              >
+                {seat.name}
+              </SeatItem>
+            ))}
+        </SeatsContainer>
+        <CaptionContainer>
+          <CaptionItem>
+            <CaptionCircle color={"#1AAE9E"} borderColor={"#0E7D71"} />
+            Selecionado
+          </CaptionItem>
+          <CaptionItem>
+            <CaptionCircle color={"#C3CFD9"} borderColor={"#808F9D"} />
+            Disponível
+          </CaptionItem>
+          <CaptionItem>
+            <CaptionCircle color={"#FBE192"} borderColor={"#F7C52B"} />
+            Indisponível
+          </CaptionItem>
+        </CaptionContainer>
+        <FormContainer onSubmit={callLogin}>
+          Nome do Comprador:
+          <input
+            data-test="client-name"
+            type="text"
+            placeholder="Digite seu nome..."
+            required
+            name={"name"}
+            value={form.name}
+            onChange={handleChange}
           />
-        </div>
-        <div>
-          <p>{seats && seats.movie.title}</p>
-          <p>
-            {seats && seats.day.weekday} - {seats && seats.name}
-          </p>
-        </div>
-      </FooterContainer>
-    </PageContainer>
+          CPF do Comprador:
+          <input
+            data-test="client-cpf"
+            type="number"
+            placeholder="Digite seu CPF..."
+            required
+            name={"cpf"}
+            value={form.cpf}
+            onChange={handleChange}
+          />
+          <button data-test="book-seat-btn" type="submit">
+            Reservar Assento(s)
+          </button>
+        </FormContainer>
+        <FooterContainer data-test="footer">
+          <div>
+            <img
+              src={seats && seats.movie.posterURL}
+              alt={seats && seats.movie.title}
+            />
+          </div>
+          <div>
+            <p>{seats && seats.movie.title}</p>
+            <p>
+              {seats && seats.day.weekday} - {seats && seats.name}
+            </p>
+          </div>
+        </FooterContainer>
+      </PageContainer>
+    </>
   );
 }
 
@@ -271,5 +281,21 @@ const FooterContainer = styled.div`
         margin-top: 10px;
       }
     }
+  }
+`;
+
+const NavContainer = styled.div`
+  width: 100%;
+  height: 70px;
+  display: flex;
+  align-items: center;
+  font-size: 34px;
+  position: fixed;
+  top: 0;
+  a {
+    position: fixed;
+    left: 18px;
+    text-decoration: none;
+    color: #000000;
   }
 `;

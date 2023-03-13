@@ -3,8 +3,8 @@ import HomePage from "./pages/HomePage/HomePage";
 import SeatsPage from "./pages/SeatsPage/SeatsPage";
 import SessionsPage from "./pages/SessionsPage/SessionsPage";
 import SuccessPage from "./pages/SuccessPage/SuccessPage";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { useState } from "react";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 export default function App() {
   const [form, setForm] = useState({ ids: [], name: "", cpf: "" });
@@ -13,7 +13,6 @@ export default function App() {
   return (
     <BrowserRouter>
       <NavContainer>CINEFLEX</NavContainer>
-
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/sessoes/:idFilme" element={<SessionsPage />} />
@@ -56,7 +55,9 @@ const NavContainer = styled.div`
   position: fixed;
   top: 0;
   a {
+    position: fixed;
+    left: 18px;
     text-decoration: none;
-    color: #e8833a;
+    color: #000000;
   }
 `;
